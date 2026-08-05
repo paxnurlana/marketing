@@ -26,11 +26,19 @@
     @media(min-width:700px){.shell{padding-top:26px}.card{padding:42px}.stage{padding:40px 0}.options{grid-template-columns:1fr 1fr}.option{min-height:62px}.step h1,.step h2{font-size:38px}.fields{grid-template-columns:1fr 1fr}.final-success h2{font-size:36px}}
     @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}.lights:before,.lights:after,.liquid:after,.bubble{animation:none}.step.active{animation:none}.noise{display:none}}
   </style>
+  <!-- Meta Pixel Code -->
+  <script>
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  let pixelEnabled=true;try{const s=new URLSearchParams(location.search);if(s.has('no_pixel'))localStorage.setItem('disable_meta_pixel','1');if(s.has('pixel_on'))localStorage.removeItem('disable_meta_pixel');pixelEnabled=localStorage.getItem('disable_meta_pixel')!=='1'}catch(e){}
+  if(pixelEnabled){fbq('init','3165355223656540');fbq('track','PageView');try{const p=new URLSearchParams(location.search);if(!localStorage.getItem('meta_unique_visitor')){fbq('trackCustom','UniqueVisitor');localStorage.setItem('meta_unique_visitor','1')}const source=p.get('utm_source')||'';if(p.has('fbclid')||/facebook|instagram|meta/i.test(source)){fbq('trackCustom','AdLandingView',{utm_source:source||'meta'})}}catch(e){}}
+  </script>
+  <!-- End Meta Pixel Code -->
 </head>
 <body>
+  <noscript><img height="1" width="1" style="display:none" alt="" src="https://www.facebook.com/tr?id=3165355223656540&ev=PageView&noscript=1"></noscript>
   <div class="noise" aria-hidden="true"></div><div class="lights" aria-hidden="true"></div>
   <main class="shell">
-    <header class="topbar"><a class="brand" href="index.html">Бексултан Ахметкали<small>Агентство роста</small></a><a class="close" href="index.html" aria-label="Вернуться на главную">×</a></header>
+    <header class="topbar"><a class="brand" href="index.html">Бексултан Ахметкали<small>Performance-маркетолог</small></a><a class="close" href="index.html" aria-label="Вернуться на главную">×</a></header>
     <div class="progress-head"><span id="stepLabel">Вопрос 1 из 11</span><strong id="percent">9%</strong></div>
     <div class="tube" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="9"><div class="liquid" id="liquid"><i class="bubble b1"></i><i class="bubble b2"></i><i class="bubble b3"></i></div></div><div class="burst-particles" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
     <section class="stage"><form class="card" id="quiz" novalidate>
@@ -50,8 +58,10 @@
     </form></section>
   </main>
   <script>
-    const WHATSAPP_NUMBER=''; // Добавьте номер без + и пробелов, например: 77001234567
+    const WHATSAPP_NUMBER='77471949217';
     const WHATSAPP_TEXT='Здравствуйте! Я прошёл диагностику на сайте. Хочу уточнить детали и получить персональное КП.';
+    const TELEGRAM_BOT_TOKEN='8681124799:AAERKJjg5ofa18pOw7fPKwwKy6DY97tx19U';
+    const TELEGRAM_CHAT_ID='-5587186077';
     const steps=[...document.querySelectorAll('.step')],answers={},quiz=document.getElementById('quiz'),next=document.getElementById('next'),back=document.getElementById('back'),actions=document.getElementById('actions'),micro=document.getElementById('micro'),liquid=document.getElementById('liquid'),tube=document.querySelector('.tube'),label=document.getElementById('stepLabel'),percent=document.getElementById('percent');
     let current=0,direction=1;const questionCount=steps.length-1;
     try{Object.assign(answers,JSON.parse(localStorage.getItem('diagnosticDraft')||'{}'))}catch(e){}
@@ -63,7 +73,9 @@
     function centerQuiz(){requestAnimationFrame(()=>window.scrollTo({top:0,behavior:'smooth'}))}
     function render(){steps.forEach((s,i)=>{s.classList.toggle('active',i===current);s.classList.toggle('back-in',i===current&&direction<0)});if(current>=questionCount){actions.style.display='none';micro.style.display='none';label.textContent='Готово';percent.textContent='100%';liquid.style.width='100%';tube.setAttribute('aria-valuenow','100');prepareSuccess();centerQuiz();return}sync();const p=Math.round((current+1)/questionCount*100);label.textContent=`Вопрос ${current+1} из ${questionCount}`;percent.textContent=p+'%';liquid.style.width=p+'%';tube.setAttribute('aria-valuenow',p);back.disabled=current===0;next.textContent=current===questionCount-1?'Подготовить КП':'Продолжить';steps[current].querySelector('.error')?.classList.remove('show');centerQuiz()}
     function commit(step){const key=step.dataset.key,v=valueOf(step);answers[key]=v;save()}
-    function goNext(){const step=steps[current];if(!valid(step)){step.querySelector('.error')?.classList.add('show');step.querySelector('.field')?.focus();return}commit(step);if(current===questionCount-1){answers.createdAt=new Date().toISOString();save();next.disabled=true;current=questionCount;direction=1;render();return}current++;direction=1;render()}
+    function trackMetaLead(){if(typeof fbq!=='function')return;const phone=(answers.contacts?.phone||'').replace(/\D/g,'');const key='meta_lead_'+phone;try{if(localStorage.getItem(key))return;fbq('track','Lead',{content_name:'Marketing diagnostic quiz'});localStorage.setItem(key,'1')}catch(e){fbq('track','Lead',{content_name:'Marketing diagnostic quiz'})}}
+    function sendLeadToTelegram(){const labels={business:'Компания',revenue:'Оборот в месяц',budget:'Рекламный бюджет',average_check:'Средний чек',handler:'Кто обрабатывает заявки',crm:'CRM',lead_source:'Источник заявок',reason:'Причина поиска команды',format:'Формат сотрудничества',growth:'Планы при хорошем результате'};const lines=['🔥 НОВЫЙ ЛИД С КВИЗА','',`👤 Имя: ${answers.contacts.name}`,`📱 Телефон: ${answers.contacts.phone}`,''];Object.entries(labels).forEach(([key,label])=>lines.push(`${label}: ${answers[key]||'—'}`));lines.push('',`Страница: ${location.href}`,`Время: ${new Date().toLocaleString('ru-RU')}`);const body=new URLSearchParams({chat_id:TELEGRAM_CHAT_ID,text:lines.join('\n')});fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,{method:'POST',mode:'no-cors',body}).catch(()=>{})}
+    function goNext(){const step=steps[current];if(!valid(step)){step.querySelector('.error')?.classList.add('show');step.querySelector('.field')?.focus();return}commit(step);if(current===questionCount-1){answers.createdAt=new Date().toISOString();save();trackMetaLead();sendLeadToTelegram();next.disabled=true;current=questionCount;direction=1;render();return}current++;direction=1;render()}
     quiz.addEventListener('click',e=>{const option=e.target.closest('.option');if(!option)return;const step=option.closest('.step');step.querySelectorAll('.option').forEach(o=>o.classList.remove('selected'));option.classList.add('selected');answers[step.dataset.key]=option.textContent.trim();save();step.querySelector('.error')?.classList.remove('show');setTimeout(()=>{if(steps[current]===step)goNext()},230)});
     const nameField=quiz.querySelector('[name=name]'),phoneField=quiz.querySelector('[name=phone]');
     nameField.addEventListener('input',()=>{nameField.value=nameField.value.replace(/[^A-Za-zА-Яа-яЁёІіҢңҒғҮүҰұҚқӨөҺһ\s-]/g,'')});
