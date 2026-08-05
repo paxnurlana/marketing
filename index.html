@@ -75,6 +75,7 @@
     @keyframes coinFall{0%{opacity:0;transform:translateY(-8px) rotateY(0) scale(.72)}12%{opacity:1}68%{opacity:1;transform:translateY(77px) rotateY(540deg) scale(1)}82%,100%{opacity:0;transform:translateY(91px) rotateY(720deg) scale(.55)}}
     @keyframes paymentFlash{0%,34%{opacity:0;transform:translateY(6px) scale(.75)}48%,68%{opacity:1;transform:none}82%,100%{opacity:0;transform:translateY(-8px) scale(.9)}}
     .footer{border-top:0}
+    .hero-photo:before{content:"";position:absolute;inset:0;z-index:3;pointer-events:none;background:url("assets/noise.gif") repeat;opacity:.13;mix-blend-mode:screen;image-rendering:pixelated;transform:translateZ(0)}
     .hero-photo{z-index:0;background:transparent}.hero-energy{z-index:1}.hero-copy{z-index:2}
     @media(prefers-reduced-motion:reduce){.metric-icon i,.message-outline,.message-dot,.message-ghost,.sales-bar,.sales-arrow,.sales-coin,.falling-coin,.payment-flash{animation:none}.metric-icon i{display:none}.falling-coin{opacity:1;top:20px}.noise-layer{display:none}}
   </style>
